@@ -1,0 +1,24 @@
+@import '~antd/dist/antd.css';
+
+.App {
+  margin: 0 auto;
+  padding: 20px;
+  height: 500px;
+  width: 100%;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: darkred;
+}
+
+h1, .center {
+  text-align: center;
+}
