@@ -32,22 +32,17 @@ class FormPreferences extends React.Component {
         }
     }
 
-    handleSubmit = e => {
-        e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            if (!err) {
-                try {
-                    API.storage.sync.set(values).then(() => {
-                        this.setState({success: true});
-                        this.sendRefreshMessage();
-                    }).catch((error) => {
-                        this.setState({error});
-                    });
-                } catch (error) {
-                    this.setState({error});
-                }
-            }
-        });
+    handleSubmit = (values) => {
+        try {
+            API.storage.sync.set(values).then(() => {
+                this.setState({success: true});
+                this.sendRefreshMessage();
+            }).catch((error) => {
+                this.setState({error});
+            });
+        } catch (error) {
+            this.setState({error});
+        }
     };
 
     refreshDelay = 500;
@@ -78,7 +73,6 @@ class FormPreferences extends React.Component {
     };
 
     render() {
-        const { getFieldDecorator } = this.props.form;
         const { dirty, success, error, domain, integrationID, region } = this.state;
 
         const formItemLayout = {
@@ -105,33 +99,24 @@ class FormPreferences extends React.Component {
         };
 
         return (
-            <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+            <Form {...formItemLayout} onFinish={this.handleSubmit}>
                 <Form.Item label="Target Domain">
-                    {getFieldDecorator('domain', {
-                        initialValue: domain,
-                        rules: [{
-                            required: true,
-                            message: 'Please input your target domain!',
-                        }],
-                    })(<Input onChange={this.setDomain} />)}
+                    <Form.Item name="domain" noStyle initialValue={domain}
+                               rules={[{required: false, message: 'Please input your target domain!'}]}>
+                        <Input onChange={this.setDomain} />
+                    </Form.Item>
                 </Form.Item>
                 <Form.Item label="Integration ID">
-                    {getFieldDecorator('integrationID', {
-                        initialValue: integrationID,
-                        rules: [{
-                            required: true,
-                            message: 'Please input your Watson Assistant integration id!',
-                        }],
-                    })(<Input onChange={this.onChange} />)}
+                    <Form.Item name="integrationID" noStyle initialValue={integrationID}
+                               rules={[{required: false, message: 'Please input your Watson Assistant integration id!'}]}>
+                        <Input onChange={this.onChange} />
+                    </Form.Item>
                 </Form.Item>
                 <Form.Item label="Region">
-                    {getFieldDecorator('region', {
-                        initialValue: region,
-                        rules: [{
-                            required: true,
-                            message: 'Please input your Watson Assistant region!',
-                        }],
-                    })(<Input onChange={this.onChange} />)}
+                    <Form.Item name="region" noStyle initialValue={region}
+                               rules={[{required: false, message: 'Please input your Watson Assistant region!'}]}>
+                        <Input onChange={this.onChange} />
+                    </Form.Item>
                 </Form.Item>
                 <Form.Item {...tailFormItemLayout} className="center">
                     <Button disabled={!dirty} type="primary" htmlType="submit">Save</Button>
@@ -145,4 +130,4 @@ class FormPreferences extends React.Component {
     }
 }
 
-export default Form.create({ name: 'preferences' })(FormPreferences);
+export default FormPreferences;
